@@ -1,10 +1,3 @@
-'''
-Shooting Pigeons Text-based game.
-All code is original and written by me.
-To be run within a terminal.
-'''
-# we will be using the time package to space out terminal output
-# random will be used to generate random pigeons every time
 import time
 import random
 
@@ -21,85 +14,80 @@ def displayInstructions():
     print('You win the game when all the pigeons are dead!')
 
 def chooseN():
-    N = '' # initialize N
-    while N == '': # go as long as N hasn't been defined as an integer
+    N = ''
+    while N == '':
         userchoice = input('Enter the number of pigeons you would like to shoot: ')
-        try: # see if it's possible to convert input to integer
+        try:
             test = int(userchoice)
             if 1 <= test <= 10:
                 N = test
-                return N # if converted to integer between 1 and 10, return it
+                return N
             else:
                 print('Please an integer between 1 and 10 inclusive.')
-        except ValueError: # in the case that the user entered a non-integer
+        except ValueError:
             print('Please an integer between 1 and 10 inclusive.')
             
 def generatepigeons(num):
-    # we will generate the coordinates of the pigeons
-    # we use a set first to ensure that all coordinates are distinct, then convert back to list
     pigeons = set()
-    while len(pigeons) < num: # generate as long as there are not enough pigeons
+    while len(pigeons) < num:
         x = random.randint(1,20)
         y = random.randint(1,20)
-        pigeons.add((x,y)) # try to add new coordinates to the set
+        pigeons.add((x,y))
     return list(pigeons)
 
-def shootpigeon(list): # shootpigeon takes list of remaining coordaintes as argument
-    K = len(list) # pigeons left before shot
-    xy = [] # initialize coordinates as list
-    coordnames = ['x','y'] # for interaction in terminal (print is different for x and y coordinates)
-    for i in range(2): # repeat for x and y coordinates per shot
-        coord = 0 # initialize coordinate as 0 (needs to be between 1 to 20)
+def shootpigeon(list): 
+    K = len(list) 
+    xy = []
+    coordnames = ['x','y']
+    for i in range(2):
+        coord = 0
         while coord == 0: 
             userchoice = input('Enter the '+coordnames[i]+' coordinate you want to shoot: ') # one for x, one for y
-            try: # see if it's possible to convert input to integer
+            try:
                 test = int(userchoice)
                 if 1 <= test <= 20:
                     coord = test
                     xy.append(coord)
                 else:
                     print('Please an integer between 1 and 20 inclusive.')
-            except ValueError: # in the case that the user entered a non-integer
+            except ValueError:
                 print('Please an integer between 1 and 20 inclusive.')
-    # xy contains user input coordinates now
-    # now test if there is pigeon there & calculate distances
-    mindis = 99999 # initialize minimum distance variable
-    for i in range(K): # go through all elements of list, check for minimum distance
-        distance = ((list[i][0]-xy[0])**2+(list[i][1]-xy[1])**2)**(0.5) # calculate distances to pigeons using distance formula
-        mindis = min(mindis, distance) # take new minimum distance if needed
-        if int(distance) == 0: # if distance is 0, guaranteed a pigeon is there
+    mindis = 99999
+    for i in range(K):
+        distance = ((list[i][0]-xy[0])**2+(list[i][1]-xy[1])**2)**(0.5) 
+        mindis = min(mindis, distance)
+        if int(distance) == 0:
             print('HIT!')
-            list.pop(i) # remove the dead pigeon
+            list.pop(i)
             break
-    if len(list) != K: # if a pigeon died, the list should now be one element shorter
+    if len(list) != K: 
         print('There are '+str(K-1)+' pigeons remaining.')
         return list
-    else: # missed the shot
-        mindis = round(mindis, 2) # truncate distance
+    else: 
+        mindis = round(mindis, 2)
         print('The closest pigeon is '+str(mindis)+' units away.')
         return list
 
-def game(): # driver code
+def game():
     print('Welcome to the game where you put holes in pigeons!')
     time.sleep(1)
     print('If you would like to view the instructions, enter "yes". If not, enter anything else.')
     if input().lower() == 'yes':
         displayInstructions()
     time.sleep(0.5)
-    N = chooseN() # N will now represent how many pigeons there are at the beginning
+    N = chooseN()
     print('There are now '+str(N)+' pigeons to shoot!')
     pigeons = generatepigeons(N)
-    count = 0 # initialize shot count
-    # print(pigeons)
+    count = 0
     while len(pigeons) != 0:
         print("Shot number "+str(count+1))
         time.sleep(0.2)
         pigeons = shootpigeon(pigeons)
         count += 1
-    # after the loop, no pigeons are left and the game is over
     print('YOU WIN')
     time.sleep(0.5)
     print('You wasted '+str(count)+' bullets in destroying all the pigeons.')
 
-# run the game
 game()
+
+            
