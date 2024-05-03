@@ -35,14 +35,14 @@ def generatepigeons(num):
         pigeons.add((x,y))
     return list(pigeons)
 
-def shootpigeon(list): 
-    K = len(list) 
+def shootpigeon(pigeons): 
+    K = len(pigeons) 
     xy = []
     coordnames = ['x','y']
     for i in range(2):
         coord = 0
         while coord == 0: 
-            userchoice = input('Enter the '+coordnames[i]+' coordinate you want to shoot: ') # one for x, one for y
+            userchoice = input('Enter the '+coordnames[i]+' coordinate you want to shoot: ')
             try:
                 test = int(userchoice)
                 if 1 <= test <= 20:
@@ -54,19 +54,19 @@ def shootpigeon(list):
                 print('Please an integer between 1 and 20 inclusive.')
     mindis = 99999
     for i in range(K):
-        distance = ((list[i][0]-xy[0])**2+(list[i][1]-xy[1])**2)**(0.5) 
+        distance = ((pigeons[i][0]-xy[0])**2+(pigeons[i][1]-xy[1])**2)**(0.5) 
         mindis = min(mindis, distance)
         if int(distance) == 0:
             print('HIT!')
-            list.pop(i)
+            pigeons.pop(i)
             break
-    if len(list) != K: 
+    if len(pigeons) == K-1: 
         print('There are '+str(K-1)+' pigeons remaining.')
-        return list
+        return pigeons
     else: 
         mindis = round(mindis, 2)
         print('The closest pigeon is '+str(mindis)+' units away.')
-        return list
+        return pigeons
 
 def game():
     print('Welcome to the game where you put holes in pigeons!')
